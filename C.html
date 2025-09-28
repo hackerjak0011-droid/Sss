@@ -1,0 +1,123 @@
+<!DOCTYPE html>
+<html lang="bn">
+<head>
+  <meta charset="UTF-8">
+  <title>ক্রিকেট স্কোর ট্র্যাকার</title>
+  <style>
+    body {
+      font-family: 'SolaimanLipi', Arial, sans-serif;
+      background: #f2f2f2;
+      padding: 20px;
+    }
+    h1 {
+      column-rule-color: darkgoldenrodrn;
+    }
+    button, select {
+      padding: 10px;
+      font-size: 16px;
+      margin: 5px;
+    }
+    #scoreboard {
+      background: #e6ffe6;
+      padding: 15px;
+      margin-top: 20px;
+      border-radius: 10px;
+    }
+    #ballLog {
+      background: #fff;
+      padding: 10px;
+      margin-top: 15px;
+      border: 1px solid #ccc;
+      max-height: 200px;
+      overflow-y: auto;
+    }
+  </style>
+</head>
+<body>
+
+<h1>🏏<colgroup></colgroup>CRICKRT</coler> <B></B></h1>
+
+<div>
+  <label>কোন বলে কি হইছে:</label>
+  <select id="ballResult">
+    <option value="0">০ (ডট বল)</option>
+    <option value="1">১ রান</option>
+    <option value="2">২ রান</option>
+    <option value="3">৩ রান</option>
+    <option value="4">৪ রান</option>
+    <option value="6">৬ রান</option>
+    <option value="W">☠️ উইকেট</option>
+    <option value="NB">নো বল (১ রান)</option>
+    <option value="WD">ওয়াইড (১ রান)</option>
+  </select>
+  <button onclick="addBall()">✅ Add <b></b></button>
+  <button onclick="resetMatch()">🔁 রিসেট</button>
+</div>
+
+<div id="scoreboard">
+  <p><strong>মোট রান:</strong> <span id="totalRuns">0</span></p>
+  <p><strong>উইকেট:</strong> <span id="wickets">0</span></p>
+  <p><strong>ওভার:</strong> <span id="overs">0.0</span></p>
+  <p><strong>মোট বল:</strong> <span id="totalBalls">0</span></p>
+</div>
+
+<h3>📝কোন বলে কি হইছে সকল হিসাব </h3>
+<div id="ballLog"></div>
+<hh> EDT<B>sanu</hh>
+<script>
+  let totalRuns = 0;
+  let totalBalls = 0;
+  let wickets = 0;
+  let legalBalls = 0;
+  let ballLog = [];
+
+  function addBall() {
+    const result = document.getElementById("ballResult").value;
+
+    if (result === "W") {
+      wickets++;
+      legalBalls++;
+      ballLog.push("W");
+    } else if (result === "NB" || result === "WD") {
+      totalRuns += 1;
+      ballLog.push(result);
+    } else {
+      const runs = parseInt(result);
+      totalRuns += runs;
+      legalBalls++;
+      ballLog.push(runs);
+    }
+
+    totalBalls = ballLog.length;
+
+    updateScore();
+  }
+
+  function updateScore() {
+    const overs = Math.floor(legalBalls / 6) + "." + (legalBalls % 6);
+    document.getElementById("totalRuns").innerText = totalRuns;
+    document.getElementById("wickets").innerText = wickets;
+    document.getElementById("overs").innerText = overs;
+    document.getElementById("totalBalls").innerText = totalBalls;
+
+    // বল বাই বল দেখানো
+    document.getElementById("ballLog").innerHTML = ballLog.map((ball, index) => {
+      return `বল ${index + 1}: ${ball}`;
+    }).join("<br>");
+  }
+
+  function resetMatch() {
+    if (confirm("তুমি কি সব রিসেট করতে চাও?")) {
+      totalRuns = 0;
+      totalBalls = 0;
+      wickets = 0;
+      legalBalls = 0;
+      ballLog = [];
+      updateScore();
+      document.getElementById("ballLog").innerHTML = "";
+    }
+  }
+</script>
+
+</body>
+</html>
